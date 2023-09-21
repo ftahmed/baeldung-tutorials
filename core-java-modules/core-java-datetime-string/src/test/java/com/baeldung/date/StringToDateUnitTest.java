@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Locale.IsoCountryCode;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
@@ -78,11 +79,30 @@ public class StringToDateUnitTest {
     public void givenDateString_whenConvertedToDateUsingCustomFormatter_thenWeGetCorrectLocalDate() {
         LocalDate expectedLocalDate = LocalDate.of(1980, 05, 05);
 
-        String dateInString = "Mon, 05 May 1980";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy", Locale.ENGLISH);
-        LocalDate dateTime = LocalDate.parse(dateInString, formatter);
+        String enDateInString = "Mon, 05 May 1980";
+        String frDateInString = "lun., 5 mai 1980";
+        String nlDateInString = "ma, 5 mei 1980";
+        String bdDateInString = "সোম, 5 মে 1980";
 
-        assertThat(dateTime).isEqualTo(expectedLocalDate);
+        DateTimeFormatter enFormatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy", Locale.ENGLISH);
+        DateTimeFormatter frFormatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy", Locale.FRANCE);
+        DateTimeFormatter nlFormatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy", Locale.of("nl", "NL"));
+        DateTimeFormatter bdFormatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy", Locale.of("bn", "BD"));
+
+        String enFormattedDateTime = enFormatter.format(expectedLocalDate);
+        String frFormattedDateTime = frFormatter.format(expectedLocalDate);
+        String nlFormattedDateTime = nlFormatter.format(expectedLocalDate);
+        String bdFormattedDateTime = bdFormatter.format(expectedLocalDate);
+
+        LocalDate enDateTime = LocalDate.parse(enDateInString, enFormatter);
+        LocalDate frDateTime = LocalDate.parse(frDateInString, frFormatter);
+        LocalDate nlDateTime = LocalDate.parse(nlDateInString, nlFormatter);
+        LocalDate bdDateTime = LocalDate.parse(bdDateInString, bdFormatter);
+
+        assertThat(enDateTime).isEqualTo(expectedLocalDate);
+        assertThat(frDateTime).isEqualTo(expectedLocalDate);
+        assertThat(nlDateTime).isEqualTo(expectedLocalDate);
+        assertThat(bdDateTime).isEqualTo(expectedLocalDate);
     }
 
     @Test
